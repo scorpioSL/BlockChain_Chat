@@ -124,8 +124,7 @@ io.on("connection", (socket) => {
                         });
                       }
 
-                      console.log(newmessage,'newmsg');
-                      
+                      console.log(newmessage, "newmsg");
 
                       newmessage.save().then((newres) => {
                         io.to(data.to).emit("newMessage", {
@@ -146,50 +145,40 @@ io.on("connection", (socket) => {
         res[0].populate("receiver", ["username", "email", "_id"]);
         res[0].execPopulate().then((pop) => {
           message
-                    .findOne({}, {}, { sort: { created_at: -1 } })
-                    .then((msgres) => {
-                      let newmessage = Object.assign({});
-                      if (msgres == null) {
-                        newmessage = new message({
-                          sender: data.uid,
-                          receiver: data.to,
-                          message: crypto.AES.encrypt(
-                            data.message,
-                            key.key
-                          ).toString(),
-                          previous_hash: "0",
-                          hash: crypto.AES.encrypt(
-                            data.message + data.uid + data.to,
-                            key.key
-                          ).toString(),
-                        });
-                      } else {
-                        newmessage = new message({
-                          sender: data.uid,
-                          receiver: data.to,
-                          message: crypto.AES.encrypt(
-                            data.message,
-                            key.key
-                          ).toString(),
-                          previous_hash: msgres.hash,
-                          hash: crypto.AES.encrypt(
-                            data.message + data.uid + data.to,
-                            key.key
-                          ).toString(),
-                        });
-                      }
-
-                      console.log(newmessage,'newmsg');
-                      
-
-                      newmessage.save().then((newres) => {
-                        io.to(data.to).emit("newMessage", {
-                          message: data.message,
-                          room: res[0],
-                          sender: data.uid,
-                        });
-                      });
-                    });
+            .findOne({}, {}, { sort: { _id: -1 } })
+            .then((msgres) => {
+              let newmessage = Object.assign({});
+              if (msgres == null) {
+                newmessage = new message({
+                  sender: data.uid,
+                  receiver: data.to,
+                  message: crypto.AES.encrypt(data.message, key.key).toString(),
+                  previous_hash: "0",
+                  hash: crypto.AES.encrypt(
+                    data.message + data.uid + data.to,
+                    key.key
+                  ).toString(),
+                });
+              } else {
+                newmessage = new message({
+                  sender: data.uid,
+                  receiver: data.to,
+                  message: crypto.AES.encrypt(data.message, key.key).toString(),
+                  previous_hash: msgres.hash,
+                  hash: crypto.AES.encrypt(
+                    data.message + data.uid + data.to,
+                    key.key
+                  ).toString(),
+                });
+              }
+              newmessage.save().then((newres) => {
+                io.to(data.to).emit("newMessage", {
+                  message: data.message,
+                  room: res[0],
+                  sender: data.uid,
+                });
+              });
+            });
         });
       }
     });
@@ -199,7 +188,6 @@ io.on("connection", (socket) => {
     socket.join(data.uid);
     UsersOnline.push(socket.rooms[0]);
     io.sockets.emit("onlineUsers", { users: UsersOnline });
-    // socket.broadcast.emit("onlineUsers", { users: UsersOnline });
   });
   console.log("a user connected");
 });
