@@ -12,7 +12,7 @@ var getAll = (req, res, next) => {
 }
 
 var getContactMessages = (req, res, next) => {
-    message.find({ room_id: req.body.room_id }).
+    message.find({ $or: [{ room_id: req.body.room_id1 }, { room_id: req.body.room_id2 }] }).
         populate("sender", ["username", "email", "_id"]).
         populate("receiver", ["username", "email", "_id"]).
         then(response => {

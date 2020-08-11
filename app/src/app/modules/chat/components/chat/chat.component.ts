@@ -45,15 +45,33 @@ export class ChatComponent implements OnInit {
     this.UserId = Auth.getUserId();
 
     this.socketService.getMessage().subscribe((msg: any) => {
+      this.playAudio();
       console.log(msg);
-      console.log(this.SelectedRoom, 'selected');
+      console.log(this.ContactList);
+
+      if (this.ContactList.length > 0) {
+        this.ContactList.forEach(element => {
+          if (element.room_id == msg.room.room_id) {
+            element.newMessage = true;
+          }
+        });
+      }
+
       if (this.SelectedRoom.room_id == undefined) {
         return;
       }
 
+
+
+
       if (msg.room.room_id == this.SelectedRoom.room_id) {
         this.Messages.push(msg);
       }
+    });
+
+    this.socketService.newContactReceive().subscribe(() => {
+      this.toaster.success("You have been added as a new contact from a user");
+      this.getContactList();
     });
   }
 
@@ -75,6 +93,7 @@ export class ChatComponent implements OnInit {
             public_key: res.obj.public_key,
             private_key: res.obj.private_key,
           });
+          this.socketService.addNewContact(item);
         },
         (error) => {
           console.log(error);
@@ -148,9 +167,11 @@ export class ChatComponent implements OnInit {
   }
 
   selectRoom(index) {
+    this.ContactList[index].newMessage = false;
     this.SelectedRoom = this.ContactList[index];
     let Send = Object.assign({
-      room_id: this.SelectedRoom.room_id,
+      room_id1: Auth.getUserId() + this.SelectedRoom.person._id,
+      room_id2: this.SelectedRoom.person._id + Auth.getUserId(),
       userid: Auth.getUserId()
     });
 
@@ -191,7 +212,16 @@ export class ChatComponent implements OnInit {
     }
     this.newMessage.to = this.SelectedRoom.person._id;
     this.newMessage.uid = Auth.getUserId();
+    this.newMessage.createdAt = new Date();
     this.socketService.sendMessage(this.newMessage);
+    this.Messages.push(this.newMessage);
     this.getNewMessage();
+  }
+
+  playAudio() {
+    let audio = new Audio();
+    audio.src = "./assets/mp3/juntos.mp3";
+    audio.load();
+    audio.play();
   }
 }

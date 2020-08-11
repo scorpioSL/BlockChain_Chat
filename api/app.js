@@ -60,8 +60,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (data) => {
-    contact.find({ room_id: data.to + data.uid }).then((res) => {
+    contact.find({ $or: [{ room_id: data.uid + data.to }, { room_id: data.to + data.uid }] }).then((res) => {
       if (res.length == 0) {
+        console.log(res, 'res');
+        console.log(data.uid + data.to, 'data');
         generateKeyPair(
           "rsa",
           {
@@ -188,6 +190,10 @@ io.on("connection", (socket) => {
         });
       }
     });
+  });
+
+  socket.on("addNewContact",(data)=>{
+    io.to(data._id).emit("newContact",{});
   });
 
   socket.on("online", (data) => {

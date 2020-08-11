@@ -25,7 +25,7 @@
           <ul class="contacts">
             <li [class]="contact.person._id == SelectedRoom.person._id ? 'active':''"
               *ngFor="let contact of ContactList;let i = index;">
-              <div (click)="selectRoom(i)" class="d-flex bd-highlight">
+              <div (click)="selectRoom(i)" class="d-flex bd-highlight" [class]="contact.newMessage ? 'newMessage' : ''">
                 <div class="img_cont">
                   <img
                     src="https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
@@ -73,20 +73,20 @@
         </div>
         <div class="card-body msg_card_body">
           <div *ngFor="let msg of Messages;let i = index;">
-            <div *ngIf="msg.sender == UserId" class="d-flex justify-content-start mb-4">
+            <div *ngIf="msg.sender._id == UserId || msg.uid == UserId" class="d-flex justify-content-start mb-4">
               <div class="img_cont_msg">
                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
                   class="rounded-circle user_img_msg">
               </div>
               <div class="msg_cotainer">
-                Hi, how are you samim?
-                <span class="msg_time">8:40 AM, Today</span>
+                {{msg.message}}
+                <span style="min-width: 90px;" class="msg_time">{{ msg.createdAt | date:'short' }}</span>
               </div>
             </div>
             <div *ngIf="msg.sender != UserId" class="d-flex justify-content-end mb-4">
               <div class="msg_cotainer_send">
                 {{msg.message}}
-                <span class="msg_time_send">8:55 AM, Today</span>
+                <span style="min-width: 90px;" class="msg_time_send">{{ msg.createdAt | date:'short' }}</span>
               </div>
               <div class="img_cont_msg">
                 <img

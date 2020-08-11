@@ -7,13 +7,21 @@ import { MessageModel } from '../models/message-model';
   providedIn: 'root',
 })
 export class SocketserviceService {
-  constructor(private socket: Socket) {}
+  constructor(private socket: Socket) { }
 
   sendMessage(msg: MessageModel) {
     this.socket.emit('message', msg);
   }
   getMessage() {
     return this.socket.fromEvent('newMessage');
+  }
+
+  addNewContact(model) {
+    this.socket.emit('addNewContact', model);
+  }
+
+  newContactReceive() {
+    return this.socket.fromEvent('newContact');
   }
 
   setOnlineStatus(model) {
