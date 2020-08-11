@@ -34,4 +34,12 @@ export class ChathttpService extends BaseService {
       this.httpOptions
     );
   }
+
+  public getMessages(model) :Observable<any>{
+    return this.http.post(
+      `${environment.baseEndPoint}/msg/messages/contact`,
+      model,
+      this.httpOptions
+    );
+  }
 }

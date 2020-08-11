@@ -15,6 +15,7 @@ const path = require("path");
 // Routes
 const authRoute = require("./routes/authRoute");
 const contactRoute = require("./routes/contactRoute");
+const messageRoute = require("./routes/messageRoute");
 
 // Models
 const contact = require("./models/ContactModel");
@@ -43,6 +44,7 @@ app.use(cors());
 // Registering routes
 app.use("/api/auth/", authRoute);
 app.use("/api/contact/", contactRoute);
+app.use("/api/msg/", messageRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello");
@@ -58,7 +60,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (data) => {
-    contact.find({ room_id: data.uid + data.to }).then((res) => {
+    contact.find({ room_id: data.to + data.uid }).then((res) => {
       if (res.length == 0) {
         generateKeyPair(
           "rsa",
@@ -107,6 +109,7 @@ io.on("connection", (socket) => {
                             data.message + data.uid + data.to,
                             key.key
                           ).toString(),
+                          room_id: data.to + data.uid
                         });
                       } else {
                         newmessage = new message({
@@ -121,6 +124,7 @@ io.on("connection", (socket) => {
                             data.message + data.uid + data.to,
                             key.key
                           ).toString(),
+                          room_id: data.to + data.uid
                         });
                       }
 
@@ -136,7 +140,7 @@ io.on("connection", (socket) => {
                     });
                 });
               },
-              (error) => {}
+              (error) => { }
             );
           }
         );
@@ -158,6 +162,7 @@ io.on("connection", (socket) => {
                     data.message + data.uid + data.to,
                     key.key
                   ).toString(),
+                  room_id: data.to + data.uid
                 });
               } else {
                 newmessage = new message({
@@ -169,6 +174,7 @@ io.on("connection", (socket) => {
                     data.message + data.uid + data.to,
                     key.key
                   ).toString(),
+                  room_id: data.to + data.uid
                 });
               }
               newmessage.save().then((newres) => {

@@ -32,8 +32,6 @@ var add = async (req, res, next) => {
           saveres.populate("owner", ["username", "email", "_id"]);
           saveres.populate("receiver", ["username", "email", "_id"]);
           saveres.execPopulate().then((pop) => {
-            console.log(pop, "pop");
-            console.log(saveres);
             res.json({ type: "success", obj: saveres });
           });
         },

@@ -20,6 +20,9 @@ const messageSchema = new Schema(
     hash: {
       type: String,
     },
+    room_id: {
+      type: String
+    }
   },
   { timestamps: true }
 );

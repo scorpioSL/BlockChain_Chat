@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit {
     private chatHttpService: ChathttpService,
     private socketService: SocketserviceService,
     private toaster: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     $(document).ready(function () {
@@ -149,7 +149,22 @@ export class ChatComponent implements OnInit {
 
   selectRoom(index) {
     this.SelectedRoom = this.ContactList[index];
-    console.log(this.SelectedRoom);
+    let Send = Object.assign({
+      room_id: this.SelectedRoom.room_id,
+      userid: Auth.getUserId()
+    });
+
+    this.chatHttpService.getMessages(Send).subscribe(
+      res => {
+        if (res.result != undefined) {
+          this.Messages = res.result;
+        }
+      },
+      error => {
+        console.log(error);
+
+      }
+    );
   }
 
   getMessages() {
