@@ -1,1 +1,51 @@
-<p>block-chain works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center">
+                <h4>Blockchain</h4>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <th>Index</th>
+                <th>Transactions</th>
+                <th>Time</th>
+                <th>Previous hash</th>
+                <th>Hash</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let message of messages;let i = index;">
+                    <td>{{ i }}</td>
+                    <td>
+                        <table class="table table-responsive">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sender</td>
+                                    <td>{{ message.sender.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Receiver</td>
+                                    <td>{{ message.receiver.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Time</td>
+                                    <td>{{ message.createdAt | date:'short' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Message</td>
+                                    <td>{{ message.message }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>{{ message.createdAt | date:'short' }}</td>
+                    <td>{{ message.previous_hash }}</td>
+                    <td>{{ message.hash }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

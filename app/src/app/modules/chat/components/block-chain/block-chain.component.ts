@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Auth } from 'src/app/modules/shared/models/auth';
+import { ChathttpService } from '../../services/chathttp.service';
 
 @Component({
   selector: 'app-block-chain',
@@ -7,9 +9,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BlockChainComponent implements OnInit {
 
-  constructor() { }
+  messages = [];
+  constructor(private httpService:ChathttpService) { }
 
   ngOnInit(): void {
+    this.getAllMessages();
+  }
+
+  getAllMessages() {
+    let send = Object.assign({
+      userid: Auth.getUserId()
+    });
+
+    this.httpService.getAllBlockChain(send).subscribe(
+      res=>{
+        if(res.type == 'success'){
+          this.messages = res.result;
+        }
+      },
+      error=>{
+        console.log(error);
+        
+      }
+    )
+
+
   }
 
 }
