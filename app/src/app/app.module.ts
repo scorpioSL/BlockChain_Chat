@@ -12,11 +12,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { HomeviewComponent } from './homeview/homeview.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3200', options: {} };
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, HomeviewComponent],
   imports: [
     CommonModule,
     BrowserModule,
