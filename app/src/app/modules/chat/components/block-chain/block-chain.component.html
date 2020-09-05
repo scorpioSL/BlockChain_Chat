@@ -11,7 +11,7 @@
             <thead>
                 <th>Index</th>
                 <th>Transactions</th>
-                <th>Time</th>
+                <th>TimeStamp</th>
                 <th>Previous hash</th>
                 <th>Hash</th>
             </thead>
@@ -32,7 +32,7 @@
                                 </tr>
                                 <tr>
                                     <td>Time</td>
-                                    <td>{{ message.createdAt | date:'short' }}</td>
+                                    <td>{{ message.createdAt}}</td>
                                 </tr>
                                 <tr>
                                     <td>Message</td>
@@ -41,7 +41,7 @@
                             </tbody>
                         </table>
                     </td>
-                    <td>{{ message.createdAt | date:'short' }}</td>
+                    <td>{{ message.createdAt}}</td>
                     <td>{{ message.previous_hash }}</td>
                     <td>{{ message.hash }}</td>
                 </tr>

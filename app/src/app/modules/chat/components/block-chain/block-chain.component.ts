@@ -10,7 +10,7 @@ import { ChathttpService } from '../../services/chathttp.service';
 export class BlockChainComponent implements OnInit {
 
   messages = [];
-  constructor(private httpService:ChathttpService) { }
+  constructor(private httpService: ChathttpService) { }
 
   ngOnInit(): void {
     this.getAllMessages();
@@ -22,14 +22,19 @@ export class BlockChainComponent implements OnInit {
     });
 
     this.httpService.getAllBlockChain(send).subscribe(
-      res=>{
-        if(res.type == 'success'){
-          this.messages = res.result;
+      res => {
+        if (res.type == 'success') {
+          this.messages = res.result.map((el) => {
+            el.createdAt = new Date(el.createdAt).getTime();
+            console.log(new Date(el.createdAt).getTime());
+            
+            return el
+          });
         }
       },
-      error=>{
+      error => {
         console.log(error);
-        
+
       }
     )
 
